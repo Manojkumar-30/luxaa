@@ -405,12 +405,9 @@ document.addEventListener("touchend", handleMouseUp);
 const player = document.querySelector(".player");
 const video = player.querySelector(".viewer");
 const controls = player.querySelector(".player__controls");
-const progresss = player.querySelector(".progresss");
 const progressBar = player.querySelector(".progress__filled");
 const toggleButton = player.querySelector(".togglePlayback");
-const volume = player.querySelector(".playerVolume");
-const speed = player.querySelector(".playerSpeed");
-const fullscreen = player.querySelector(".toggleFullscreen");
+
 
 /* Functions */
 function togglePlay() {
@@ -419,14 +416,7 @@ function togglePlay() {
  icon.classList.toggle("player__playbackIcon--paused");
 }
 
-function handleRangeUpdate() {
- video[this.name] = this.value;
-}
 
-function handleProgress() {
- const percent = video.currentTime / video.duration * 100;
- progressBar.style.flexBasis = `${percent}%`;
-}
 
 function handleSeek(e) {
  const seekTime = e.offsetX / progress.offsetWidth * video.duration;
@@ -448,37 +438,9 @@ function toggleFullscreen() {
  }
 }
 
-var countrolsHideTimeout;
-function toggleControls() {
- if (!video.paused) {
-  clearTimeout(countrolsHideTimeout);
-  controls.classList.add("player__controls--visible");
-  countrolsHideTimeout = setTimeout(() => {
-   controls.classList.remove("player__controls--visible");
-  }, 3000);
- }
-}
 
 /* Hook up the event listeners */
 
 video.addEventListener("click", togglePlay);
-video.addEventListener("timeupdate", handleProgress);
-
 toggleButton.addEventListener("click", togglePlay);
-volume.addEventListener("change", handleRangeUpdate);
-volume.addEventListener("mousemove", handleRangeUpdate);
-speed.addEventListener("change", handleRangeUpdate);
 
-let mousedown = false;
-progress.addEventListener("click", handleSeek);
-progress.addEventListener("mousemove", e => mousedown && handleSeek(e));
-progress.addEventListener("mousedown", () => (mousedown = true));
-progress.addEventListener("mouseup", () => (mousedown = false));
-
-fullscreen.addEventListener("click", toggleFullscreen);
-video.addEventListener("dblclick", toggleFullscreen);
-
-video.addEventListener("mousemove", toggleControls);
-controls.addEventListener("mouseover", () => {
- clearTimeout(countrolsHideTimeout);
-});
